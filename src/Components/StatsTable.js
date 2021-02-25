@@ -30,13 +30,13 @@ export default function StatsTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   
   const statsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/2021-regular/player_stats_totals.json";
-  let apiToken = process.env.API_KEY;
+  let apiToken;
   
-  // if (process.env.NODE_ENV !== "production") {
-  //   apiToken = process.env.REACT_APP_API_KEY;
-  // } else {
-  //   apiToken = process.env.API_KEY;
-  // }
+  if (process.env.NODE_ENV !== "production") {
+    apiToken = process.env.REACT_APP_API_KEY;
+  } else {
+    apiToken = process.env.API_KEY;
+  }
 
   useEffect(() => {
     const getData = async () => {
