@@ -20,20 +20,23 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Hidden from "@material-ui/core/Hidden";
 
-const statsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/2021-regular/player_stats_totals.json";
-let api_key;
-  
-  if (process.env.NODE_ENV !== "production") {
-    api_key = process.env.REACT_APP_API_KEY;
-  } else {
-    api_key = process.env.API_KEY;
-  }
+
+
 
 export default function StatsTable() {
   const [players, setPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  
+  const statsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/2021-regular/player_stats_totals.json";
+  let apiToken;
+  
+  if (process.env.NODE_ENV !== "production") {
+    apiToken = process.env.REACT_APP_API_KEY;
+  } else {
+    apiToken = process.env.API_KEY;
+  }
 
   useEffect(() => {
     const getData = async () => {
@@ -41,7 +44,7 @@ export default function StatsTable() {
 
       const statsRes = await axios.get(statsURL, {
         headers: {
-          Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
         },
       });
 
@@ -49,7 +52,7 @@ export default function StatsTable() {
       setIsLoading(false);
     };
     getData();
-  }, []);
+  }, [apiToken]);
 
   function statsSorting(e) {
     const sortingLegend = {
@@ -96,7 +99,7 @@ export default function StatsTable() {
       axios
         .get(statsURL, {
           headers: {
-            Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+            Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
           },
         })
         .then((res) => {
@@ -106,7 +109,7 @@ export default function StatsTable() {
       axios
         .get(`${statsURL}?position=c,lw,rw,d`, {
           headers: {
-            Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+            Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
           },
         })
         .then((res) => {
@@ -116,7 +119,7 @@ export default function StatsTable() {
       axios
         .get(`${statsURL}?position=${e.target.innerText}`, {
           headers: {
-            Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+            Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
           },
         })
         .then((res) => {

@@ -19,12 +19,13 @@ export default function Schedule() {
 
   const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json`;
   const standingsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json";
-  let api_key;
+
+  let apiToken;
   
   if (process.env.NODE_ENV !== "production") {
-    api_key = process.env.REACT_APP_API_KEY;
+    apiToken = process.env.REACT_APP_API_KEY;
   } else {
-    api_key = process.env.API_KEY;
+    apiToken = process.env.API_KEY;
   }
 
   useEffect(() => {
@@ -33,13 +34,13 @@ export default function Schedule() {
 
       const teamsRes = await axios.get(standingsURL, {
         headers: {
-          Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
         },
       });
 
       const schedRes = await axios.get(scheduleURL, {
         headers: {
-          Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
         },
       });
 
@@ -50,7 +51,7 @@ export default function Schedule() {
       setIsLoading(false);
     };
     getData();
-  }, [scheduleURL, api_key]);
+  }, [scheduleURL, apiToken]);
 
   let schedArr = schedule.slice().map((game) => {
     let homeIdx = teams.findIndex((team) => team.team.id === game.schedule.homeTeam.id);

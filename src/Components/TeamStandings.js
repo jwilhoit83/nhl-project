@@ -9,12 +9,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 export default function TeamStandings() {
   const standingsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json";
-  let api_key;
+  let apiToken;
 
   if (process.env.NODE_ENV !== "production") {
-    api_key = process.env.REACT_APP_API_KEY;
+    apiToken = process.env.REACT_APP_API_KEY;
   } else {
-    api_key = process.env.API_KEY;
+    apiToken = process.env.API_KEY;
   }
 
   const [allStandings, setAllStandings] = useState([]);
@@ -27,7 +27,7 @@ export default function TeamStandings() {
 
       const res = await axios.get(standingsURL, {
         headers: {
-          Authorization: "Basic " + btoa(`${api_key}:MYSPORTSFEEDS`),
+          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
         },
       });
 
@@ -50,7 +50,7 @@ export default function TeamStandings() {
     };
 
     getData();
-  }, [api_key]);
+  }, [apiToken]);
 
   return (
     <Container>
