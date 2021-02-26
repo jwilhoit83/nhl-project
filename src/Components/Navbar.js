@@ -45,7 +45,7 @@ export default function Navbar() {
       <AppBar className={classes.appbarStyles} position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            NHL React Project
+            Jrod's Hockey Project
           </Typography>
           <Hidden smDown>
             <Link to="/stats">
