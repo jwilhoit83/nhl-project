@@ -40,8 +40,6 @@ export default function Schedule() {
 
       setTeams(teamsRes.data.teams);
       setSchedule(schedRes.data.games);
-      console.log(schedRes.data.games);
-      console.log(teamsRes.data.teams);
       setIsLoading(false);
     };
     getData();
