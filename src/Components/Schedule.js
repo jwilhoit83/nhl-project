@@ -20,13 +20,7 @@ export default function Schedule() {
   const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json`;
   const standingsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json";
 
-  let apiToken;
-  
-  if (process.env.NODE_ENV !== "production") {
-    apiToken = process.env.REACT_APP_API_KEY;
-  } else {
-    apiToken = process.env.API_KEY;
-  }
+  const apiToken = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
     const getData = async () => {
