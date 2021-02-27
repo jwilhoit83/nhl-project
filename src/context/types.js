@@ -1,0 +1,5 @@
+export const SET_LOADING = 'SET_LOADING'
+export const SET_TEAMS = 'SET_TEAMS'
+export const SET_SCHEDULE = 'SET_SCHEDULE'
+export const SET_SCHEDULE_DATE = 'SET_SCHEDULE_DATE'
+export const SET_DISPLAY_DATE = 'SET_DISPLAY_DATE'

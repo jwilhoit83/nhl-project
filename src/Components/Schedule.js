@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import HockeyContext from "../context/hockey/hockeyContext";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -10,42 +11,57 @@ import ButtonBase from "@material-ui/core/ButtonBase";
 import TextField from "@material-ui/core/TextField";
 
 export default function Schedule() {
-  const [schedule, setSchedule] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [schedDate, setSchedDate] = useState(formatDate(setNewDate(Date.now())));
-  const [displayDate, setDisplayDate] = useState(setNewDate(Date.now()));
+  // const [schedule, setSchedule] = useState([]);
+  // const [teams, setTeams] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [schedDate, setSchedDate] = useState(formatDate(setNewDate(Date.now())));
+  // const [displayDate, setDisplayDate] = useState(setNewDate(Date.now()));
+  const hockeyContext = useContext(HockeyContext);
+  const {
+    schedule,
+    teams,
+    loading,
+    schedDate,
+    displayDate,
+    setSchedule,
+    setTeams,
+    setSchedDate,
+    setDisplayDate,
+  } = hockeyContext;
   const classes = useStyles();
 
-  const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json?force=false`;
-  const standingsURL =
-    "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json?force=false";
+  // const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json?force=false`;
+  // const standingsURL =
+  //   "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json?force=false";
 
-  const apiToken = process.env.REACT_APP_API_KEY;
+  // const apiToken = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
+    // const getData = async () => {
+    // setIsLoading(true);
 
-      const teamsRes = await axios.get(standingsURL, {
-        headers: {
-          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-        },
-      });
+    // const teamsRes = await axios.get(standingsURL, {
+    //   headers: {
+    //     Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+    //   },
+    // });
 
-      const schedRes = await axios.get(scheduleURL, {
-        headers: {
-          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-        },
-      });
-      console.log(teamsRes.data.teams);
-      console.log(schedRes.data.games);
-      setTeams(teamsRes.data.teams);
-      setSchedule(schedRes.data.games);
-      setIsLoading(false);
-    };
-    getData();
-  }, [scheduleURL, apiToken]);
+    // const schedRes = await axios.get(scheduleURL, {
+    //   headers: {
+    //     Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+    //   },
+    // });
+    // console.log(teamsRes.data.teams);
+    // console.log(schedRes.data.games);
+    // setTeams(teamsRes.data.teams);
+    // setSchedule(schedRes.data.games);
+    // setIsLoading(false);
+
+    // };
+    // getData();
+    setSchedule(schedDate);
+    setTeams();
+  }, [schedDate]);
 
   let schedArr = schedule.slice().map((game) => {
     let homeIdx = teams.findIndex((team) => team.team.id === game.schedule.homeTeam.id);
@@ -150,7 +166,7 @@ export default function Schedule() {
 
   return (
     <Container>
-      {isLoading ? (
+      {loading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress color="secondary" />
         </div>

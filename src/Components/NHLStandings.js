@@ -1,4 +1,3 @@
-import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -16,7 +15,11 @@ export default function NHLStandings({ standings }) {
       <TableRow key={team.team.id} style={{ backgroundColor: "#616161" }}>
         <TableCell className={classes.stickyCol}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img style={{ height: 40, width: 40 }} alt={team.team.name + " Logo"} src={team.team.officialLogoImageSrc} />
+            <img
+              style={{ height: 40, width: 40 }}
+              alt={team.team.name + " Logo"}
+              src={team.team.officialLogoImageSrc}
+            />
             <Hidden smDown>
               {team.team.city} <Hidden mdDown>{team.team.name}</Hidden>
             </Hidden>
@@ -27,15 +30,25 @@ export default function NHLStandings({ standings }) {
         <TableCell className={classes.colStyles}>{team.stats.standings.losses}</TableCell>
         <TableCell className={classes.colStyles}>{team.stats.standings.overtimeLosses}</TableCell>
         <TableCell className={classes.colStyles}>{team.stats.standings.points}</TableCell>
-        <TableCell className={classes.colStyles}>{team.stats.standings.pointsPercent.toFixed(3)}</TableCell>
         <TableCell className={classes.colStyles}>
-          {team.stats.standings.wins - team.stats.standings.overtimeWins - team.stats.standings.shootoutWins}
+          {team.stats.standings.pointsPercent.toFixed(3)}
         </TableCell>
-        <TableCell className={classes.colStyles}>{team.stats.standings.wins - team.stats.standings.shootoutWins}</TableCell>
+        <TableCell className={classes.colStyles}>
+          {team.stats.standings.wins -
+            team.stats.standings.overtimeWins -
+            team.stats.standings.shootoutWins}
+        </TableCell>
+        <TableCell className={classes.colStyles}>
+          {team.stats.standings.wins - team.stats.standings.shootoutWins}
+        </TableCell>
         <TableCell className={classes.colStyles}>{team.stats.miscellaneous.goalsFor}</TableCell>
         <TableCell className={classes.colStyles}>{team.stats.miscellaneous.goalsAgainst}</TableCell>
-        <TableCell className={classes.colStyles}>{team.stats.miscellaneous.goalsFor - team.stats.miscellaneous.goalsAgainst}</TableCell>
-        <TableCell className={classes.colStyles}>{team.stats.standings.shootoutWins + "-" + team.stats.standings.shootoutLosses}</TableCell>
+        <TableCell className={classes.colStyles}>
+          {team.stats.miscellaneous.goalsFor - team.stats.miscellaneous.goalsAgainst}
+        </TableCell>
+        <TableCell className={classes.colStyles}>
+          {team.stats.standings.shootoutWins + "-" + team.stats.standings.shootoutLosses}
+        </TableCell>
       </TableRow>
     );
   });

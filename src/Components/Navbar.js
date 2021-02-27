@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -59,11 +59,7 @@ export default function Navbar() {
             </Link>
           </Hidden>
           <Hidden mdUp>
-            <IconButton
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleClick}
-            >
+            <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
               <MenuIcon color="secondary" />
             </IconButton>
           </Hidden>
@@ -72,30 +68,26 @@ export default function Navbar() {
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
+            onClose={handleClose}>
             <MenuItem
               className={classes.menuListStyles}
               component={Link}
               to="/stats"
-              onClick={handleClose}
-            >
+              onClick={handleClose}>
               Player Stats
             </MenuItem>
             <MenuItem
               className={classes.menuListStyles}
               component={Link}
               to="/standings/nhl"
-              onClick={handleClose}
-            >
+              onClick={handleClose}>
               Team Standings
             </MenuItem>
             <MenuItem
               className={classes.menuListStyles}
               component={Link}
               to="/schedule"
-              onClick={handleClose}
-            >
+              onClick={handleClose}>
               Schedule
             </MenuItem>
           </Menu>
