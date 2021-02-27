@@ -17,8 +17,9 @@ export default function Schedule() {
   const [displayDate, setDisplayDate] = useState(setNewDate(Date.now()));
   const classes = useStyles();
 
-  const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json`;
-  const standingsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json";
+  const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json?force=false`;
+  const standingsURL =
+    "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json?force=false";
 
   const apiToken = process.env.REACT_APP_API_KEY;
 
@@ -37,7 +38,8 @@ export default function Schedule() {
           Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
         },
       });
-
+      console.log(teamsRes.data.teams);
+      console.log(schedRes.data.games);
       setTeams(teamsRes.data.teams);
       setSchedule(schedRes.data.games);
       setIsLoading(false);
@@ -80,11 +82,30 @@ export default function Schedule() {
             </ButtonBase>
           </Grid>
           <Grid item xs={12} sm container alignContent="center" alignItems="center">
-            <Grid item xs container direction="column" spacing={2} alignContent="center" alignItems="center">
+            <Grid
+              item
+              xs
+              container
+              direction="column"
+              spacing={2}
+              alignContent="center"
+              alignItems="center">
               <Grid item xs>
-                <Typography variant="subtitle1">{new Date(game.gameTime).toDateString().slice(0, 10)}</Typography>
-                {game.homeScore === null ? <Typography variant="subtitle1">{new Date(game.gameTime).toLocaleTimeString()}</Typography> : ""}
-                {game.homeScore !== null ? <Typography variant="h6">{game.homeScore + " - " + game.awayScore}</Typography> : ""}
+                <Typography variant="subtitle1">
+                  {new Date(game.gameTime).toDateString().slice(0, 10)}
+                </Typography>
+                {game.homeScore === null ? (
+                  <Typography variant="subtitle1">
+                    {new Date(game.gameTime).toLocaleTimeString()}
+                  </Typography>
+                ) : (
+                  ""
+                )}
+                {game.homeScore !== null ? (
+                  <Typography variant="h6">{game.homeScore + " - " + game.awayScore}</Typography>
+                ) : (
+                  ""
+                )}
                 {game.currentPeriod !== null && game.playedStatus.slice(0, 9) !== "COMPLETED" ? (
                   <>
                     <Typography variant="body2">{"Period: " + game.currentPeriod}</Typography>
@@ -93,12 +114,19 @@ export default function Schedule() {
                 ) : (
                   ""
                 )}
-                {game.currentIntermission !== null && game.playedStatus.slice(0, 9) !== "COMPLETED" ? (
-                  <Typography variant="body2">{"Intermission: " + game.currentIntermission}</Typography>
+                {game.currentIntermission !== null &&
+                game.playedStatus.slice(0, 9) !== "COMPLETED" ? (
+                  <Typography variant="body2">
+                    {"Intermission: " + game.currentIntermission}
+                  </Typography>
                 ) : (
                   ""
                 )}
-                {game.playedStatus.slice(0, 9) === "COMPLETED" ? <Typography variant="h6">Final</Typography> : ""}
+                {game.playedStatus.slice(0, 9) === "COMPLETED" ? (
+                  <Typography variant="h6">Final</Typography>
+                ) : (
+                  ""
+                )}
                 {game.scheduleStatus === "POSTPONED" ? (
                   <>
                     <Typography variant="body2">{game.scheduleStatus}</Typography>
