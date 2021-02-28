@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
+import { scheduleMap, setNewDate, formatDate } from "../utils/schedule";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -16,38 +17,40 @@ export default function Schedule() {
   const hockeyContext = useContext(HockeyContext);
   const { schedule, teams, loading, setSchedule, setTeams } = hockeyContext;
 
-  const classes = useStyles();
-
   useEffect(() => {
     setSchedule(schedDate);
     setTeams();
     // eslint-disable-next-line
   }, [schedDate]);
 
-  let schedArr = schedule.slice().map((game) => {
-    let homeIdx = teams.findIndex((team) => team.team.id === game.schedule.homeTeam.id);
-    let awayIdx = teams.findIndex((team) => team.team.id === game.schedule.awayTeam.id);
-    return {
-      gameID: game.schedule.id,
-      gameTime: new Date(game.schedule.startTime).toString().slice(0, 21),
-      homeTeamCity: teams[homeIdx].team.city || "",
-      homeTeamName: teams[homeIdx].team.name || "",
-      homeLogo: teams[homeIdx].team.officialLogoImageSrc || "",
-      homeScore: game.score.homeScoreTotal,
-      homeShots: game.score.homeShotsTotal,
-      awayTeamCity: teams[awayIdx].team.city || "",
-      awayTeamName: teams[awayIdx].team.name || "",
-      awayLogo: teams[awayIdx].team.officialLogoImageSrc || "",
-      awayScore: game.score.awayScoreTotal,
-      awayShots: game.score.awayShotsTotal,
-      currentPeriod: game.score.currentPeriod,
-      currentIntermission: game.score.currentIntermission,
-      currentPeriodTimeRemaining: secondsConverter(game.score.currentPeriodSecondsRemaining),
-      playedStatus: game.schedule.playedStatus,
-      scheduleStatus: game.schedule.scheduleStatus,
-      delayedOrPostponedReason: game.schedule.delayedOrPostponedReason,
-    };
-  });
+  const schedArr = scheduleMap(schedule, teams);
+
+  const useStyles = makeStyles(() => ({
+    root: {
+      flexGrow: 1,
+    },
+    image: {
+      width: 128,
+      height: 128,
+    },
+    img: {
+      margin: "auto",
+      display: "block",
+      maxWidth: "100%",
+      maxHeight: "100%",
+    },
+    paper: {
+      padding: 5,
+      margin: "auto",
+      maxWidth: 500,
+      marginBottom: 10,
+      textAlign: "center",
+      color: "#eeeeee",
+      fontWeight: 600,
+    },
+  }));
+
+  const classes = useStyles();
 
   const gamesList = schedArr.map((game) => (
     <div key={game.gameID}>
@@ -156,44 +159,3 @@ export default function Schedule() {
     </Container>
   );
 }
-
-function secondsConverter(sec) {
-  let minutes = Math.floor(Number(sec) / 60);
-  let seconds = Number(sec) - minutes * 60;
-  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-}
-
-function setNewDate(date) {
-  const tzOffset = new Date().getTimezoneOffset() * 60000;
-
-  return new Date(date - tzOffset).toISOString().slice(0, 10);
-}
-
-function formatDate(date) {
-  return date.replace(/-/g, "");
-}
-
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-  },
-  image: {
-    width: 128,
-    height: 128,
-  },
-  img: {
-    margin: "auto",
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%",
-  },
-  paper: {
-    padding: 5,
-    margin: "auto",
-    maxWidth: 500,
-    marginBottom: 10,
-    textAlign: "center",
-    color: "#eeeeee",
-    fontWeight: 600,
-  },
-}));

@@ -33,7 +33,7 @@ const HockeyState = (props) => {
   const [state, dispatch] = useReducer(HockeyReducer, initialState);
 
   // get player stats from API
-  const setPlayers = async (filter) => {
+  const setPlayers = async (filter = '') => {
     const res = await axios.get(statsURL, {
       headers: {
         Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
