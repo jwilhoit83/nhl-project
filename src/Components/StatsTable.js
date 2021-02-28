@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useContext } from "react";
+import HockeyContext from "../context/hockey/hockeyContext";
 import { makeStyles } from "@material-ui/core/styles";
 import PositionTabs from "./PositionTabs";
+
 import Container from "@material-ui/core/Container";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -19,7 +20,6 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Hidden from "@material-ui/core/Hidden";
-
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -28,35 +28,28 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 export default function StatsTable() {
-  const [players, setPlayers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const hockeyContext = useContext(HockeyContext);
+  const {
+    players,
+    currentInjury,
+    loading,
+    setPlayers,
+    sortPlayers,
+    setCurrentInjury,
+    clearCurrentInjury,
+  } = hockeyContext;
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [current, setCurrent] = useState(null);
-
-  const statsURL =
-    "https://api.mysportsfeeds.com/v2.1/pull/nhl/2021-regular/player_stats_totals.json";
-  const injuryURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/injury_history.json?player=";
-  const apiToken = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
+    setPlayers("");
+    statsSorting();
+    // eslint-disable-next-line
+  }, []);
 
-      const statsRes = await axios.get(statsURL, {
-        headers: {
-          Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-        },
-      });
-      console.log(statsRes.data.playerStatsTotals);
-      setPlayers(statsRes.data.playerStatsTotals);
-      setIsLoading(false);
-    };
-    getData();
-  }, [apiToken]);
-
-  function statsSorting(e) {
+  function statsSorting(e = null) {
     const sortingLegend = {
       player: (a, b) => a.player.lastName.localeCompare(b.player.lastName),
       team: (a, b) => a.team.abbreviation.localeCompare(b.team.abbreviation),
@@ -120,40 +113,16 @@ export default function StatsTable() {
 
     let sortedArr = players.slice();
 
-    setPlayers(sortedArr.sort(sortingLegend[e.target.innerText.toLowerCase()]));
+    sortPlayers(sortedArr.sort(sortingLegend[e ? e.target.innerText.toLowerCase() : 'p']));
   }
 
   function positionFilter(e) {
     if (e.target.innerText === "ALL") {
-      axios
-        .get(statsURL, {
-          headers: {
-            Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-          },
-        })
-        .then((res) => {
-          setPlayers(res.data.playerStatsTotals);
-        });
+      setPlayers("");
     } else if (e.target.innerText === "SK") {
-      axios
-        .get(`${statsURL}?position=c,lw,rw,d`, {
-          headers: {
-            Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-          },
-        })
-        .then((res) => {
-          setPlayers(res.data.playerStatsTotals);
-        });
+      setPlayers("c,lw,rw,d");
     } else {
-      axios
-        .get(`${statsURL}?position=${e.target.innerText}`, {
-          headers: {
-            Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-          },
-        })
-        .then((res) => {
-          setPlayers(res.data.playerStatsTotals);
-        });
+      setPlayers(e.target.innerText);
     }
   }
 
@@ -211,19 +180,13 @@ export default function StatsTable() {
   };
 
   const handleOpen = async (e) => {
-    const injuryRes = await axios.get(`${injuryURL}${e.target.parentElement.id}`, {
-      headers: {
-        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-      },
-    });
-    console.log(injuryRes.data);
-    setCurrent(injuryRes.data);
     setDialogOpen(true);
+    setCurrentInjury(e.target.parentElement.id);
   };
 
   const handleClose = () => {
-    setCurrent(null);
     setDialogOpen(false);
+    clearCurrentInjury();
   };
 
   const useStyles = makeStyles({
@@ -268,7 +231,7 @@ export default function StatsTable() {
 
   return (
     <Container>
-      {isLoading ? (
+      {loading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress color="secondary" />
         </div>
@@ -430,28 +393,29 @@ export default function StatsTable() {
                               title={player.injuryDescription}
                               onClick={handleOpen}
                             />
-                            {current && (
+                            {currentInjury && (
                               <Dialog
-                                maxWidth="md"
+                                fullWidth={false}
+                                maxWidth="sm"
                                 open={dialogOpen}
                                 onClose={handleClose}
+                                scroll="paper"
                                 aria-labelledby="injury-dialog">
                                 <DialogTitle id="injury-dialog">
-                                  {current.references.playerReferences[0].firstName +
+                                  {currentInjury.references.playerReferences[0].firstName +
                                     " " +
-                                    current.references.playerReferences[0].lastName +
-                                    " - #" +
-                                    current.references.playerReferences[0].jerseyNumber}
+                                    currentInjury.references.playerReferences[0].lastName}
                                 </DialogTitle>
                                 <DialogContent>
-                                  <DialogContentText>
-                                    {new Date(
-                                      current.playerInjuries[0].injuryHistory.reverse()[0].asOfDate
-                                    ).toDateString() +
-                                      " - " +
-                                      current.playerInjuries[0].injuryHistory.reverse()[0]
-                                        .longDescription}
-                                  </DialogContentText>
+                                  {currentInjury.playerInjuries[0].injuryHistory
+                                    .sort((a, b) => new Date(b.asOfDate) - new Date(a.asOfDate))
+                                    .map((injury, idx) => (
+                                      <DialogContentText key={idx}>
+                                        {new Date(injury.asOfDate).toDateString() +
+                                          " - " +
+                                          injury.longDescription}
+                                      </DialogContentText>
+                                    ))}
                                 </DialogContent>
                                 <DialogActions>
                                   <Button onClick={handleClose} color="secondary">

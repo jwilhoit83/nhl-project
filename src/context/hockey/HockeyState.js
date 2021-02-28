@@ -6,8 +6,10 @@ import {
   SET_LOADING,
   SET_TEAMS,
   SET_SCHEDULE,
-  SET_SCHEDULE_DATE,
-  SET_DISPLAY_DATE,
+  SET_PLAYERS,
+  SORT_PLAYERS,
+  SET_CURRENT_INJURY,
+  CLEAR_CURRENT_INJURY,
 } from "../types";
 
 import React from "react";
@@ -17,19 +19,51 @@ const HockeyState = (props) => {
     loading: false,
     teams: [],
     schedule: [],
-    schedDate: formatDate(setNewDate(Date.now())),
-    displayDate: setNewDate(Date.now),
+    players: [],
+    currentInjury: null,
   };
 
   const apiToken = process.env.REACT_APP_API_KEY;
-  //   const scheduleURL = `https://api.mysportsfeeds.com/v2.1/pull/nhl/current/date/${schedDate}/games.json?force=false`;
   const standingsURL =
     "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/standings.json?force=false";
   const statsURL =
     "https://api.mysportsfeeds.com/v2.1/pull/nhl/2021-regular/player_stats_totals.json?force=false";
-  const injuryURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/injury_history.json?player=";
+  const injuryURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/injury_history.json";
 
   const [state, dispatch] = useReducer(HockeyReducer, initialState);
+
+  // get player stats from API
+  const setPlayers = async (filter) => {
+    const res = await axios.get(statsURL, {
+      headers: {
+        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+      },
+      params: {
+        position: filter,
+      },
+    });
+
+    dispatch({ type: SET_PLAYERS, payload: res.data.playerStatsTotals });
+  };
+
+  // sort players for stats table
+  const sortPlayers = (array) => {
+      dispatch({type: SORT_PLAYERS, payload: array})
+  }
+
+  // set current injured player info from API
+  const setCurrentInjury = async (id) => {
+    const res = await axios.get(injuryURL, {
+      headers: {
+        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+      },
+      params: {
+        player: id,
+      },
+    });
+
+    dispatch({ type: SET_CURRENT_INJURY, payload: res.data });
+  };
 
   // get teams from API
   const setTeams = async () => {
@@ -60,16 +94,9 @@ const HockeyState = (props) => {
     dispatch({ type: SET_SCHEDULE, payload: res.data.games });
   };
 
-  // set the date for display
-  const setDisplayDate = (date) => {
-    setLoading();
-    dispatch({ type: SET_DISPLAY_DATE, payload: setNewDate(date) });
-  };
-
-  //set the date for schedule url
-  const setSchedDate = (date) => {
-    setLoading();
-    dispatch({ type: SET_SCHEDULE_DATE, payload: formatDate(setNewDate(date)) });
+  // clear current injury
+  const clearCurrentInjury = () => {
+    dispatch({ type: CLEAR_CURRENT_INJURY });
   };
 
   // set loading
@@ -81,12 +108,14 @@ const HockeyState = (props) => {
         loading: state.loading,
         teams: state.teams,
         schedule: state.schedule,
-        schedDate: state.schedDate,
-        displayDate: state.displayDate,
+        players: state.players,
+        currentInjury: state.currentInjury,
         setTeams,
         setSchedule,
-        setDisplayDate,
-        setSchedDate,
+        setPlayers,
+        sortPlayers,
+        setCurrentInjury,
+        clearCurrentInjury,
         setLoading,
       }}>
       {props.children}
@@ -95,13 +124,3 @@ const HockeyState = (props) => {
 };
 
 export default HockeyState;
-
-function setNewDate(date) {
-  const tzOffset = new Date().getTimezoneOffset() * 60000;
-
-  return new Date(date - tzOffset).toISOString().slice(0, 10);
-}
-
-function formatDate(date) {
-  return date.replace(/-/g, "");
-}

@@ -2,8 +2,10 @@ import {
   SET_LOADING,
   SET_TEAMS,
   SET_SCHEDULE,
-  SET_SCHEDULE_DATE,
-  SET_DISPLAY_DATE,
+  SET_PLAYERS,
+  SET_CURRENT_INJURY,
+  CLEAR_CURRENT_INJURY,
+  SORT_PLAYERS,
 } from "../types";
 
 export default (state, action) => {
@@ -20,17 +22,25 @@ export default (state, action) => {
         schedule: action.payload,
         loading: false,
       };
-    case SET_SCHEDULE_DATE:
+    case SET_PLAYERS:
       return {
         ...state,
-        schedDate: action.payload,
-        loading: false,
+        players: action.payload,
       };
-    case SET_DISPLAY_DATE:
+    case SORT_PLAYERS:
       return {
         ...state,
-        displayDate: action.payload,
-        loading: false,
+        players: action.payload,
+      };
+    case SET_CURRENT_INJURY:
+      return {
+        ...state,
+        currentInjury: action.payload,
+      };
+    case CLEAR_CURRENT_INJURY:
+      return {
+        ...state,
+        currentInjury: null,
       };
     case SET_LOADING:
       return {
