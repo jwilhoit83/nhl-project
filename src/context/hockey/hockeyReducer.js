@@ -6,6 +6,7 @@ import {
   SET_CURRENT_INJURY,
   CLEAR_CURRENT_INJURY,
   SORT_PLAYERS,
+  SET_STANDINGS,
 } from "../types";
 
 export default (state, action) => {
@@ -26,6 +27,13 @@ export default (state, action) => {
       return {
         ...state,
         players: action.payload,
+      };
+    case SET_STANDINGS:
+      return {
+        ...state,
+        nhlStandings: action.payload[0],
+        divisionalStandings: action.payload[1],
+        loading: false,
       };
     case SORT_PLAYERS:
       return {

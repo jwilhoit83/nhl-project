@@ -7,6 +7,7 @@ import {
   SET_TEAMS,
   SET_SCHEDULE,
   SET_PLAYERS,
+  SET_STANDINGS,
   SORT_PLAYERS,
   SET_CURRENT_INJURY,
   CLEAR_CURRENT_INJURY,
@@ -20,6 +21,8 @@ const HockeyState = (props) => {
     teams: [],
     schedule: [],
     players: [],
+    nhlStandings: [],
+    divisionalStandings: [],
     currentInjury: null,
   };
 
@@ -33,7 +36,7 @@ const HockeyState = (props) => {
   const [state, dispatch] = useReducer(HockeyReducer, initialState);
 
   // get player stats from API
-  const setPlayers = async (filter = '') => {
+  const setPlayers = async (filter = "") => {
     const res = await axios.get(statsURL, {
       headers: {
         Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
@@ -48,8 +51,8 @@ const HockeyState = (props) => {
 
   // sort players for stats table
   const sortPlayers = (array) => {
-      dispatch({type: SORT_PLAYERS, payload: array})
-  }
+    dispatch({ type: SORT_PLAYERS, payload: array });
+  };
 
   // set current injured player info from API
   const setCurrentInjury = async (id) => {
@@ -94,6 +97,39 @@ const HockeyState = (props) => {
     dispatch({ type: SET_SCHEDULE, payload: res.data.games });
   };
 
+  // get team standings and sort
+  const setStandings = async () => {
+    setLoading();
+
+    const res = await axios.get(standingsURL, {
+      headers: {
+        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+      },
+    });
+
+    const nhlArr = res.data.teams.slice().sort((a, b) => a.divisionRank.rank - b.divisionRank.rank);
+
+    let divisionalArr = [[], [], [], []];
+
+    res.data.teams.forEach((team) => {
+      if (team.divisionRank.divisionName === "West") {
+        divisionalArr[0].push(team);
+      } else if (team.divisionRank.divisionName === "East") {
+        divisionalArr[1].push(team);
+      } else if (team.divisionRank.divisionName === "North") {
+        divisionalArr[2].push(team);
+      } else {
+        divisionalArr[3].push(team);
+      }
+    });
+
+    divisionalArr.forEach((division) => {
+      division.sort((a, b) => a.divisionRank.rank - b.divisionRank.rank);
+    });
+
+    dispatch({ type: SET_STANDINGS, payload: [nhlArr, divisionalArr] });
+  };
+
   // clear current injury
   const clearCurrentInjury = () => {
     dispatch({ type: CLEAR_CURRENT_INJURY });
@@ -109,10 +145,13 @@ const HockeyState = (props) => {
         teams: state.teams,
         schedule: state.schedule,
         players: state.players,
+        nhlStandings: state.nhlStandings,
+        divisionalStandings: state.divisionalStandings,
         currentInjury: state.currentInjury,
         setTeams,
         setSchedule,
         setPlayers,
+        setStandings,
         sortPlayers,
         setCurrentInjury,
         clearCurrentInjury,

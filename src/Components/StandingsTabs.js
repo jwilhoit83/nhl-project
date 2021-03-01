@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -28,17 +28,17 @@ export default function StandingsTabs() {
     <Tabs value={value} onChange={handleChange} className={classes.tabBar}>
       <Tab
         component={Link}
-        to="/standings/nhl"
-        className={classes.tab}
-        title="NHL Standings"
-        label="NHL Standings"
-      />
-      <Tab
-        component={Link}
         to="/standings/division"
         className={classes.tab}
         title="Divisional Standings"
         label="Divisional Standings"
+      />
+      <Tab
+        component={Link}
+        to="/standings/nhl"
+        className={classes.tab}
+        title="NHL Standings"
+        label="NHL Standings"
       />
     </Tabs>
   );
