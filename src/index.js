@@ -3,15 +3,18 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import yellow from "@material-ui/core/colors/yellow";
+import { yellow, cyan, brown, blueGrey } from "@material-ui/core/colors";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createMuiTheme({
   palette: {
     type: "dark",
     secondary: {
-      main: yellow[700],
+      main: blueGrey[400],
     },
+  },
+  secondaryText: {
+    color: blueGrey[400],
   },
 });
 

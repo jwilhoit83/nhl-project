@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,6 +8,34 @@ import TableRow from "@material-ui/core/TableRow";
 import Hidden from "@material-ui/core/Hidden";
 
 export default function NHLStandings({ standings }) {
+  const theme = useTheme();
+
+  const useStyles = makeStyles({
+    stickyCol: {
+      minWidth: "100px",
+      maxWidth: "50vw",
+      left: 0,
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      position: "sticky",
+      zIndex: 5,
+      backgroundColor: "#424242",
+      color: "#eeeeee",
+    },
+    colHeadings: {
+      color: theme.secondaryText.color,
+    },
+    colStyles: {
+      backgroundColor: "#616161",
+      color: "#eeeeee",
+    },
+    stickyColHeader: {
+      left: 0,
+      zIndex: 6,
+      color: theme.secondaryText.color,
+    },
+  });
+
   const classes = useStyles();
 
   const standingsRows = standings.map((team) => {
@@ -104,29 +132,3 @@ export default function NHLStandings({ standings }) {
     </TableContainer>
   );
 }
-
-const useStyles = makeStyles({
-  stickyCol: {
-    minWidth: "100px",
-    maxWidth: "50vw",
-    left: 0,
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    position: "sticky",
-    zIndex: 5,
-    backgroundColor: "#424242",
-    color: "#eeeeee",
-  },
-  colHeadings: {
-    color: "#FBC02D",
-  },
-  colStyles: {
-    backgroundColor: "#616161",
-    color: "#eeeeee",
-  },
-  stickyColHeader: {
-    left: 0,
-    zIndex: 6,
-    color: "#FBC02D",
-  },
-});

@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import PositionTabs from "./PositionTabs";
-import {sortingLegend, playerMap} from '../utils/stats'
+import { sortingLegend, playerMap } from "../utils/stats";
 
 import Container from "@material-ui/core/Container";
 import Table from "@material-ui/core/Table";
@@ -80,6 +80,8 @@ export default function StatsTable() {
     clearCurrentInjury();
   };
 
+  const theme = useTheme();
+
   const useStyles = makeStyles({
     stickyCol: {
       minWidth: "100px",
@@ -94,7 +96,7 @@ export default function StatsTable() {
     },
     colHeadings: {
       cursor: "pointer",
-      color: "#FBC02D",
+      color: theme.secondaryText.color,
     },
     colStyles: {
       backgroundColor: "#616161",
@@ -103,7 +105,7 @@ export default function StatsTable() {
     stickyColHeader: {
       left: 0,
       zIndex: 6,
-      color: "#FBC02D",
+      color: theme.secondaryText.color,
       cursor: "pointer",
     },
     chipStyles: {
@@ -114,7 +116,7 @@ export default function StatsTable() {
       height: 15,
     },
     standingsHeaders: {
-      color: "#FBC02D",
+      color: theme.secondaryText.color,
     },
   });
 
@@ -264,7 +266,7 @@ export default function StatsTable() {
                           <Chip
                             id={player.id}
                             size="small"
-                            color="secondary"
+                            color='secondary'
                             label={player.injury}
                             className={classes.chipStyles}
                             title={player.injuryDescription}

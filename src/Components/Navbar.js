@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -11,25 +11,7 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  appbarStyles: {
-    backgroundColor: "#414141",
-    color: "#FBC02D",
-    marginBottom: "25px",
-  },
-  menuListStyles: {
-    color: "#FBC02D",
-  },
-}));
-
 export default function Navbar() {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -39,6 +21,27 @@ export default function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const theme = useTheme();
+
+  const useStyles = makeStyles(() => ({
+    root: {
+      flexGrow: 1,
+    },
+    title: {
+      flexGrow: 1,
+    },
+    appbarStyles: {
+      backgroundColor: "#414141",
+      color: theme.secondaryText.color,
+      marginBottom: "25px",
+    },
+    menuListStyles: {
+      color: "#FBC02D",
+    },
+  }));
+
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
