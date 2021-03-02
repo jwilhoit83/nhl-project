@@ -9,7 +9,7 @@ import {
   SET_STANDINGS,
 } from "../types";
 
-export default (state, action) => {
+const HockeyReducer = (state, action) => {
   switch (action.type) {
     case SET_TEAMS:
       return {
@@ -59,3 +59,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default HockeyReducer;

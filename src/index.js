@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { yellow, cyan, brown, blueGrey } from "@material-ui/core/colors";
+import { blueGrey } from "@material-ui/core/colors";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createMuiTheme({
