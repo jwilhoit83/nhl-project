@@ -107,7 +107,7 @@ const HockeyState = (props) => {
       },
     });
 
-    const nhlArr = res.data.teams.slice().sort((a, b) => a.divisionRank.rank - b.divisionRank.rank);
+    const nhlArr = res.data.teams.slice().sort((a, b) => a.overallRank.rank - b.overallRank.rank);
 
     let divisionalArr = [[], [], [], []];
 
