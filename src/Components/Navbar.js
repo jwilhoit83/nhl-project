@@ -37,7 +37,7 @@ export default function Navbar() {
       marginBottom: "25px",
     },
     menuListStyles: {
-      color: "#FBC02D",
+      color: theme.secondaryText.color,
     },
   }));
 
