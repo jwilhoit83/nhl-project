@@ -54,7 +54,7 @@ export default function Navbar() {
             <Link to="/stats">
               <Button color="secondary">Player Stats</Button>
             </Link>
-            <Link to="/standings/nhl">
+            <Link to="/standings/division">
               <Button color="secondary">Team Standings</Button>
             </Link>
             <Link to="/schedule">
@@ -82,7 +82,7 @@ export default function Navbar() {
             <MenuItem
               className={classes.menuListStyles}
               component={Link}
-              to="/standings/nhl"
+              to="/standings/division"
               onClick={handleClose}>
               Team Standings
             </MenuItem>
