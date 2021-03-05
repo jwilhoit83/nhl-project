@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import PositionTabs from "./PositionTabs";
+import PlayerGameLog from "./PlayerGameLog";
 import { sortingLegend, playerMap } from "../utils/stats";
 
 import Container from "@material-ui/core/Container";
@@ -21,6 +22,8 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import Hidden from "@material-ui/core/Hidden";
 import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -34,6 +37,7 @@ export default function StatsTable() {
     currentInjury,
     setPlayers,
     sortPlayers,
+    setCurrentPlayer,
     setCurrentInjury,
     clearCurrentInjury,
   } = hockeyContext;
@@ -41,6 +45,8 @@ export default function StatsTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalStyle] = useState(getModalStyle);
 
   useEffect(() => {
     setPlayers();
@@ -70,15 +76,35 @@ export default function StatsTable() {
     setPage(0);
   };
 
-  const handleOpen = async (e) => {
+  const handleDialogOpen = async (e) => {
     setDialogOpen(true);
     setCurrentInjury(e.target.parentElement.id);
   };
 
-  const handleClose = () => {
+  const handleDialogClose = () => {
     setDialogOpen(false);
     clearCurrentInjury();
   };
+
+  const handleModalOpen = (e) => {
+    setCurrentPlayer(e.target.parentElement.id);
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  function getModalStyle() {
+    const top = 50;
+    const left = 50;
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+      outline: 0,
+    };
+  }
 
   const theme = useTheme();
 
@@ -90,7 +116,7 @@ export default function StatsTable() {
       whiteSpace: "nowrap",
       overflow: "hidden",
       position: "sticky",
-      zIndex: 5,
+      zIndex: 2,
       backgroundColor: "#424242",
       color: "#eeeeee",
     },
@@ -104,7 +130,7 @@ export default function StatsTable() {
     },
     stickyColHeader: {
       left: 0,
-      zIndex: 6,
+      zIndex: 3,
       color: theme.secondaryText.color,
       cursor: "pointer",
     },
@@ -117,6 +143,15 @@ export default function StatsTable() {
     },
     standingsHeaders: {
       color: theme.secondaryText.color,
+    },
+    modal: {
+      position: "absolute",
+      maxWidth: "90%",
+      maxHeight: "80%",
+      backgroundColor: "#616161",
+      padding: 20,
+      overflow: "auto",
+      borderRadius: 10,
     },
   });
 
@@ -208,6 +243,9 @@ export default function StatsTable() {
                   title="Penalty Minutes">
                   PIM
                 </TableCell>
+                <TableCell onClick={statsSorting} className={classes.colHeadings} title="Fights">
+                  FIGHTS
+                </TableCell>
                 <TableCell
                   onClick={statsSorting}
                   className={classes.colHeadings}
@@ -259,25 +297,35 @@ export default function StatsTable() {
               ).map((player) => {
                 return (
                   <TableRow key={player.id * Math.random()} className={classes.rowStyles}>
-                    <TableCell className={classes.stickyCol}>
-                      {player.name}
+                    <TableCell id={player.id} className={classes.stickyCol}>
+                      <span style={{ cursor: "pointer" }} onClick={handleModalOpen}>
+                        {player.name}
+                      </span>
+                      <Modal
+                        open={modalOpen}
+                        onClose={handleModalClose}
+                        BackdropComponent={Backdrop}>
+                        <Container style={modalStyle} className={classes.modal}>
+                          <PlayerGameLog />
+                        </Container>
+                      </Modal>
                       {player.injury ? (
                         <>
                           <Chip
                             id={player.id}
                             size="small"
-                            color='secondary'
+                            color="secondary"
                             label={player.injury}
                             className={classes.chipStyles}
                             title={player.injuryDescription}
-                            onClick={handleOpen}
+                            onClick={handleDialogOpen}
                           />
                           {currentInjury && (
                             <Dialog
                               fullWidth={false}
                               maxWidth="sm"
                               open={dialogOpen}
-                              onClose={handleClose}
+                              onClose={handleDialogClose}
                               scroll="paper"
                               aria-labelledby="injury-dialog">
                               <DialogTitle id="injury-dialog">
@@ -288,16 +336,20 @@ export default function StatsTable() {
                               <DialogContent>
                                 {currentInjury.playerInjuries[0].injuryHistory
                                   .sort((a, b) => new Date(b.asOfDate) - new Date(a.asOfDate))
-                                  .map((injury, idx) => (
-                                    <DialogContentText key={idx}>
-                                      {new Date(injury.asOfDate).toDateString() +
-                                        " - " +
-                                        injury.longDescription}
-                                    </DialogContentText>
-                                  ))}
+                                  .map((injury, idx) => {
+                                    if (idx < 1)
+                                      return (
+                                        <DialogContentText key={idx}>
+                                          {new Date(injury.asOfDate).toDateString() +
+                                            " - " +
+                                            injury.longDescription}
+                                        </DialogContentText>
+                                      );
+                                    return null;
+                                  })}
                               </DialogContent>
                               <DialogActions>
-                                <Button onClick={handleClose} color="secondary">
+                                <Button onClick={handleDialogClose} color="secondary">
                                   Close
                                 </Button>
                               </DialogActions>
@@ -324,6 +376,7 @@ export default function StatsTable() {
                     <TableCell className={classes.colStyles}>{player.hits}</TableCell>
                     <TableCell className={classes.colStyles}>{player.timeOnIcePerGame}</TableCell>
                     <TableCell className={classes.colStyles}>{player.penaltyMinutes}</TableCell>
+                    <TableCell className={classes.colStyles}>{player.fights}</TableCell>
                     <TableCell className={classes.colStyles}>{player.blockedShots}</TableCell>
                     <TableCell className={classes.colStyles}>{player.saves}</TableCell>
                     <TableCell className={classes.colStyles}>{player.goalsAgainst}</TableCell>

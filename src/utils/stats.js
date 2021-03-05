@@ -13,6 +13,7 @@ export const sortingLegend = {
   shp: (a, b) => b.stats.scoring.shorthandedPoints - a.stats.scoring.shorthandedPoints,
   otg: (a, b) => b.stats.scoring.overtimeGoals - a.stats.scoring.overtimeGoals,
   pim: (a, b) => b.stats.penalties.penaltyMinutes - a.stats.penalties.penaltyMinutes,
+  fights: (a, b) => b.stats.penalties.fights - a.stats.penalties.fights,
   s: (a, b) =>
     (b.stats.skating ? b.stats.skating.shots : -1) - (a.stats.skating ? a.stats.skating.shots : -1),
   h: (a, b) =>
@@ -87,6 +88,7 @@ export const playerMap = (players) => {
       hits: skating ? skating.hits : "",
       timeOnIcePerGame: toiConverter(player),
       penaltyMinutes: player.stats.penalties.penaltyMinutes,
+      fights: player.stats.penalties.fights,
       blockedShots: skating ? skating.blockedShots : "",
       saves: goaltending ? goaltending.saves : "",
       goalsAgainst: goaltending ? goaltending.goalsAgainst : "",

@@ -9,6 +9,8 @@ import {
   SET_PLAYERS,
   SET_STANDINGS,
   SORT_PLAYERS,
+  SET_CURRENT_PLAYER,
+  CLEAR_CURRENT_PLAYER,
   SET_CURRENT_INJURY,
   CLEAR_CURRENT_INJURY,
 } from "../types";
@@ -23,6 +25,7 @@ const HockeyState = (props) => {
     players: [],
     nhlStandings: [],
     divisionalStandings: [],
+    currentPlayer: null,
     currentInjury: null,
   };
 
@@ -32,6 +35,7 @@ const HockeyState = (props) => {
   const statsURL =
     "https://api.mysportsfeeds.com/v2.1/pull/nhl/2021-regular/player_stats_totals.json?force=false";
   const injuryURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/injury_history.json";
+  const gameLogsURL = "https://api.mysportsfeeds.com/v2.1/pull/nhl/current/player_gamelogs.json";
 
   const [state, dispatch] = useReducer(HockeyReducer, initialState);
 
@@ -52,20 +56,6 @@ const HockeyState = (props) => {
   // sort players for stats table
   const sortPlayers = (array) => {
     dispatch({ type: SORT_PLAYERS, payload: array });
-  };
-
-  // set current injured player info from API
-  const setCurrentInjury = async (id) => {
-    const res = await axios.get(injuryURL, {
-      headers: {
-        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
-      },
-      params: {
-        player: id,
-      },
-    });
-
-    dispatch({ type: SET_CURRENT_INJURY, payload: res.data });
   };
 
   // get teams from API
@@ -130,6 +120,44 @@ const HockeyState = (props) => {
     dispatch({ type: SET_STANDINGS, payload: [nhlArr, divisionalArr] });
   };
 
+  // set current player gamelogs
+  const setCurrentPlayer = async (id) => {
+    setLoading();
+    
+    const res = await axios.get(gameLogsURL, {
+      headers: {
+        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+      },
+      params: {
+        player: id,
+        sort: 'game.starttime.d',
+        force: false,
+      },
+    });
+    console.log(res.data);
+
+    dispatch({ type: SET_CURRENT_PLAYER, payload: res.data });
+  };
+
+  // clear current player gamelogs
+  const clearCurrentPlayer = () => {
+    dispatch({ type: CLEAR_CURRENT_PLAYER });
+  };
+
+  // set current injured player info from API
+  const setCurrentInjury = async (id) => {
+    const res = await axios.get(injuryURL, {
+      headers: {
+        Authorization: "Basic " + btoa(`${apiToken}:MYSPORTSFEEDS`),
+      },
+      params: {
+        player: id,
+      },
+    });
+
+    dispatch({ type: SET_CURRENT_INJURY, payload: res.data });
+  };
+
   // clear current injury
   const clearCurrentInjury = () => {
     dispatch({ type: CLEAR_CURRENT_INJURY });
@@ -147,6 +175,7 @@ const HockeyState = (props) => {
         players: state.players,
         nhlStandings: state.nhlStandings,
         divisionalStandings: state.divisionalStandings,
+        currentPlayer: state.currentPlayer,
         currentInjury: state.currentInjury,
         setTeams,
         setSchedule,
@@ -154,6 +183,8 @@ const HockeyState = (props) => {
         setStandings,
         sortPlayers,
         setCurrentInjury,
+        setCurrentPlayer,
+        clearCurrentPlayer,
         clearCurrentInjury,
         setLoading,
       }}>

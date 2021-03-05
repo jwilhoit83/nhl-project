@@ -7,6 +7,8 @@ import {
   CLEAR_CURRENT_INJURY,
   SORT_PLAYERS,
   SET_STANDINGS,
+  SET_CURRENT_PLAYER,
+  CLEAR_CURRENT_PLAYER,
 } from "../types";
 
 const HockeyReducer = (state, action) => {
@@ -39,6 +41,17 @@ const HockeyReducer = (state, action) => {
       return {
         ...state,
         players: action.payload,
+      };
+    case SET_CURRENT_PLAYER:
+      return {
+        ...state,
+        currentPlayer: action.payload,
+        loading: false,
+      };
+    case CLEAR_CURRENT_PLAYER:
+      return {
+        ...state,
+        currentPlayer: null,
       };
     case SET_CURRENT_INJURY:
       return {
