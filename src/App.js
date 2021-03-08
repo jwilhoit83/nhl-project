@@ -1,7 +1,9 @@
-import Navbar from "./Components/Navbar";
-import StatsTable from "./Components/StatsTable";
-import TeamStandings from "./Components/TeamStandings";
-import Schedule from "./Components/Schedule";
+import NavbarMat from "./Components/NavbarMat";
+import StatsTableMat from "./Components/StatsTableMat";
+import InjuryModal from "./Components/InjuryModal";
+import TeamStandingsMat from "./Components/TeamStandingsMat";
+import ScheduleMat from "./Components/ScheduleMat";
+import GamelogModal from "./Components/GamelogModal";
 import { Route } from "react-router-dom";
 import HockeyState from "./context/hockey/HockeyState";
 
@@ -9,15 +11,21 @@ function App() {
   return (
     <>
       <HockeyState>
-        <Navbar key="Nav" />
+        {/* <Navbar key="Nav" /> */}
+        <NavbarMat />
+        <InjuryModal />
+        <GamelogModal />
         <Route path="/standings">
-          <TeamStandings />
+          {/* <TeamStandings /> */}
+          <TeamStandingsMat />
         </Route>
         <Route path="/stats">
-          <StatsTable />
+          {/* <StatsTable /> */}
+          <StatsTableMat />
         </Route>
         <Route path="/schedule">
-          <Schedule />
+          {/* <Schedule /> */}
+          <ScheduleMat />
         </Route>
       </HockeyState>
     </>

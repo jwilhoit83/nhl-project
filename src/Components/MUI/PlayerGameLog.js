@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
@@ -12,25 +12,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-const useStyles = makeStyles(() => ({
-  flex: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
-    width: "100%",
-    padding: 10,
-  },
-  avatar: {
-    height: 75,
-    width: 75,
-    fontSize: 40,
-  },
-}));
-
 const PlayerGameLog = () => {
   const hockeyContext = useContext(HockeyContext);
   const { currentPlayer, loading } = hockeyContext;
+
+  const theme = useTheme();
 
   let gameLogs = [];
 
@@ -73,6 +59,29 @@ const PlayerGameLog = () => {
       }
     });
   }
+
+  const useStyles = makeStyles(() => ({
+    flex: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100%",
+      width: "100%",
+      padding: 10,
+    },
+    avatar: {
+      height: 75,
+      width: 75,
+      fontSize: 40,
+    },
+    noWrap: {
+      whiteSpace: "nowrap",
+    },
+    secondaryText: {
+      color: theme.secondaryText.color,
+    },
+  }));
+
   const classes = useStyles();
 
   return (
@@ -110,14 +119,14 @@ const PlayerGameLog = () => {
                 )}
               </div>
               <div style={{ margin: 10 }}>
-                <h2>
+                <h5 className={classes.secondaryText}>
                   {currentPlayer.references.playerReferences[0].firstName +
                     " " +
                     currentPlayer.references.playerReferences[0].lastName +
                     " #" +
                     currentPlayer.references.playerReferences[0].jerseyNumber}
-                </h2>
-                <h4>
+                </h5>
+                <p>
                   {"Team: " +
                     currentPlayer.references.playerReferences[0].currentTeam.abbreviation +
                     " Position: " +
@@ -128,20 +137,22 @@ const PlayerGameLog = () => {
                       : " Catches: " +
                         currentPlayer.references.playerReferences[0].handedness.catches}
                   </span>
-                </h4>
-                <h4>
+                </p>
+                <p>
                   {"Age: " +
                     currentPlayer.references.playerReferences[0].age +
                     " Height: " +
                     currentPlayer.references.playerReferences[0].height +
                     "  Weight: " +
                     currentPlayer.references.playerReferences[0].weight}
-                </h4>
+                </p>
               </div>
             </div>
           </Grid>
           <Grid item sm={12} md={8}>
-            <TableContainer style={{ maxHeight: "90%", width: "100%", overflow: 'scroll' }} component={Paper}>
+            <TableContainer
+              style={{ maxHeight: "90%", width: "100%"}}
+              component={Paper}>
               <Table size="small">
                 <TableHead>
                   <TableRow>
@@ -176,7 +187,7 @@ const PlayerGameLog = () => {
                   {gameLogs[0].position !== "G"
                     ? gameLogs.slice(0, 10).map((game) => (
                         <TableRow key={game.id}>
-                          <TableCell>{game.date}</TableCell>
+                          <TableCell className={classes.noWrap}>{game.date}</TableCell>
                           <TableCell>{game.opp}</TableCell>
                           <TableCell>{game.points}</TableCell>
                           <TableCell>{game.goals}</TableCell>
@@ -189,7 +200,7 @@ const PlayerGameLog = () => {
                       ))
                     : gameLogs.slice(0, 10).map((game) => (
                         <TableRow key={game.id}>
-                          <TableCell>{game.date}</TableCell>
+                          <TableCell className={classes.noWrap}>{game.date}</TableCell>
                           <TableCell>{game.opp}</TableCell>
                           <TableCell>{game.gameStarted}</TableCell>
                           <TableCell>{game.win}</TableCell>
