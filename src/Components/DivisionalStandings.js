@@ -1,10 +1,10 @@
-const NHLStandingsMat = ({standings}) => {
-  return (
+const DivisionalStandings = ({ standings }) => {
+  const divisionTables = standings.map((division) => (
     <table key={Math.random() * 1000} className="grey darken-3">
       <thead>
         <tr>
-          <th className="colHeadings stickyColHeader secondary-dark" title="NHL Standings">
-            Overall
+          <th className="stickyColHeader secondary-dark" title="Division">
+            {division[0].divisionRank.divisionName}
           </th>
           <th className="colHeadings secondary-dark" title="Games Played">
             GP
@@ -45,9 +45,9 @@ const NHLStandingsMat = ({standings}) => {
         </tr>
       </thead>
       <tbody>
-        {standings.map((team) => (
+        {division.map((team) => (
           <tr key={team.team.id}>
-            <td className="stickyCol secondary rowstyles secondary px-5">
+            <td className="stickyCol secondary rowstyles px-5">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
                   style={{ height: 40, width: 40 }}
@@ -85,7 +85,9 @@ const NHLStandingsMat = ({standings}) => {
         ))}
       </tbody>
     </table>
-  );
-};
+  ));
 
-export default NHLStandingsMat;
+  return <>{divisionTables}</>;
+}
+
+export default DivisionalStandings;

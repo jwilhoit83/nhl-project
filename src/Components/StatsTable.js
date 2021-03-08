@@ -1,27 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
-import { makeStyles } from "@material-ui/core/styles";
-import PositionTabsMat from "./PositionTabsMat";
+import PositionTabs from "./PositionTabs";
 import { sortingLegend, playerMap } from "../utils/stats";
-
-import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
-import IconButton from "@material-ui/core/IconButton";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import LastPageIcon from "@material-ui/icons/LastPage";
-import Hidden from "@material-ui/core/Hidden";
 
-export default function StatsTableMat() {
+const StatsTable = () => {
   const hockeyContext = useContext(HockeyContext);
-  const {
-    players,
-    setPlayers,
-    sortPlayers,
-    setCurrentPlayer,
-    setCurrentInjury,
-  } = hockeyContext;
+  const { players, setPlayers, sortPlayers, setCurrentPlayer, setCurrentInjury } = hockeyContext;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -58,24 +43,9 @@ export default function StatsTableMat() {
     setCurrentInjury(e.target.id);
   };
 
-  const useStyles = makeStyles({
-    modal: {
-      position: "absolute",
-      maxWidth: "90%",
-      maxHeight: "80%",
-      backgroundColor: "#616161",
-      padding: 20,
-      overflowX: "auto",
-      overflowY: "auto",
-      borderRadius: 10,
-    },
-  });
-
-  const classes = useStyles();
-
   return (
-    <div className="container z-depth-2">
-      <PositionTabsMat onClick={positionFilter} />
+    <div className="container z-depth-3">
+      <PositionTabs onClick={positionFilter} />
       <div className="stats-table">
         <table className="grey darken-3">
           <thead>
@@ -89,10 +59,7 @@ export default function StatsTableMat() {
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Position">
                 Pos
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Games Played">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Games Played">
                 GP
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Points">
@@ -104,40 +71,22 @@ export default function StatsTableMat() {
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Assists">
                 A
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Primary Assists">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Primary Assists">
                 PA
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Powerplay Goals">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Powerplay Goals">
                 PPG
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Powerplay Points">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Powerplay Points">
                 PPP
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Shorthanded Goals">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Shorthanded Goals">
                 SHG
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Shorthanded Points">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Shorthanded Points">
                 SHP
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Overtime Goals">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Overtime Goals">
                 OTG
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Shots">
@@ -146,52 +95,31 @@ export default function StatsTableMat() {
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Hits">
                 H
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Time on Ice/Game">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Time on Ice/Game">
                 TOI
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Penalty Minutes">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Penalty Minutes">
                 PIM
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Fights">
                 FIGHTS
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Blocked Shots">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Blocked Shots">
                 BLK
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Saves">
                 SV
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Goals Against">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Goals Against">
                 GA
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Goals Against Average">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Goals Against Average">
                 GAA
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Save Percentage">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Save Percentage">
                 SV%
               </td>
-              <td
-                onClick={statsSorting}
-                className="colHeadings secondary-dark"
-                title="Games Started">
+              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Games Started">
                 GS
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Wins">
@@ -206,16 +134,18 @@ export default function StatsTableMat() {
             </tr>
           </thead>
           <tbody>
-            {(rowsPerPage > 0
-              ? playerMap(players).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : playerMap(players)
-            ).map((player) => {
+            {(rowsPerPage > 0 ? playerMap(players).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : playerMap(players)).map((player) => {
               return (
                 <tr key={player.id * Math.random()}>
                   <td id={player.id} className="rowStyles stickyCol primary-bg">
-                    <span data-target='gamelog-modal' className='modal-trigger' onClick={() => setCurrentPlayer(player.id)} style={{ cursor: "pointer" }}>
+                    <span
+                      data-target="gamelog-modal"
+                      className="modal-trigger"
+                      onClick={() => setCurrentPlayer(player.id)}
+                      style={{ cursor: "pointer" }}
+                    >
                       {player.name}
-                    </span>                    
+                    </span>
                     {player.injury ? (
                       <>
                         <a
@@ -223,7 +153,8 @@ export default function StatsTableMat() {
                           className="modal-trigger chipStyles"
                           title={player.injuryDescription}
                           onClick={openInjuryModal}
-                          id={player.id}>
+                          id={player.id}
+                        >
                           {player.injury}
                         </a>
                       </>
@@ -263,41 +194,33 @@ export default function StatsTableMat() {
           </tbody>
         </table>
       </div>
-      <TableContainer>
-        <table>
-          <thead>
-            <tr>
-              <TablePagination
-                style={{
-                  color: "#eeeeee",
-                  fontWeight: 600,
-                  display: "flex",
-                  justifyContent: "flex-start",
-                }}
-                className={classes.stickyColHeader + "browser-default"}
-                labelRowsPerPage="Rows: "
-                rowsPerPageOptions={[10, 20, 50, 75]}
-                colSpan={1}
-                count={players.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                  native: true,
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </tr>
-          </thead>
-        </table>
-      </TableContainer>
+      <table className='sticky-bottom'>
+        <tbody>
+          <tr>
+            <TablePagination
+              className="left browser-default grey darken-3 blue-grey-text text-lighten-2 full-width flex-row"
+              labelRowsPerPage="Rows: "
+              rowsPerPageOptions={[10, 20, 50, 75]}
+              colSpan={10}
+              count={players.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: { "aria-label": "rows per page" },
+                native: true,
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={PaginationButtons}
+            />
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
-}
+};
 
-function TablePaginationActions({ count, page, rowsPerPage, onChangePage }) {
+function PaginationButtons({ count, page, rowsPerPage, onChangePage }) {
   const handleFirstPageButtonClick = (event) => {
     onChangePage(event, 0);
   };
@@ -315,32 +238,43 @@ function TablePaginationActions({ count, page, rowsPerPage, onChangePage }) {
   };
 
   return (
-    <div style={{ minWidth: 500, color: "#eeeeee", fontWeight: 600 }}>
-      <Hidden mdDown>
-        <IconButton
-          onClick={handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label="first page">
-          <FirstPageIcon />
-        </IconButton>
-      </Hidden>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-        <KeyboardArrowLeft />
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page">
-        <KeyboardArrowRight />
-      </IconButton>
-      <Hidden mdDown>
-        <IconButton
+    <div style={{display: 'flex'}} className="mx-10">
+      <a
+        href="#!"
+        className={"btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" + (page === 0 ? "disabled" : "")}
+        onClick={handleFirstPageButtonClick}
+      >
+        <i className="small material-icons">first_page</i>
+      </a>
+        <a
+          href="#!"
+          className={"btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" + (page === 0 ? "disabled" : "")}
+          onClick={handleBackButtonClick}
+        >
+          <i className="small material-icons">keyboard_arrow_left</i>
+        </a>
+        <a
+          href="#!"
+          className={
+            "btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" +
+            (page >= Math.ceil(count / rowsPerPage) - 1 ? "disabled" : "")
+          }
+          onClick={handleNextButtonClick}
+        >
+          <i className="small material-icons">keyboard_arrow_right</i>
+        </a>
+        <a
+          href="#!"
+          className={
+            "btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" +
+            (page >= Math.ceil(count / rowsPerPage) - 1 ? "disabled" : "")
+          }
           onClick={handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="last page">
-          <LastPageIcon />
-        </IconButton>
-      </Hidden>
+        >
+          <i className="small material-icons">last_page</i>
+        </a>
     </div>
   );
 }
+
+export default StatsTable;

@@ -1,12 +1,12 @@
 import { useEffect, useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
 import { Route } from "react-router-dom";
-import StandingsTabsMat from "./StandingsTabsMat";
-import NHLStandingsMat from "./NHLStandingsMat";
-import DivisionalStandingsMat from "./DivisionalStandingsMat";
+import StandingsTabs from "./StandingsTabs";
+import NHLStandings from "./NHLStandings";
+import DivisionalStandings from "./DivisionalStandings";
 import LoadingAnimation from "./LoadingAnimation";
 
-export default function TeamStandingsMat() {
+const TeamStandings = () => {
   const hockeyContext = useContext(HockeyContext);
   const { setStandings, nhlStandings, divisionalStandings, loading } = hockeyContext;
 
@@ -21,17 +21,19 @@ export default function TeamStandingsMat() {
         <LoadingAnimation />
       ) : (
         <>
-          <StandingsTabsMat />
+          <StandingsTabs />
           <div className="stats-table">
             <Route path="/standings/division">
-              <DivisionalStandingsMat standings={divisionalStandings} />
+              <DivisionalStandings standings={divisionalStandings} />
             </Route>
             <Route path="/standings/nhl">
-              <NHLStandingsMat standings={nhlStandings} />
+              <NHLStandings standings={nhlStandings} />
             </Route>
           </div>
         </>
       )}
     </div>
   );
-}
+};
+
+export default TeamStandings;

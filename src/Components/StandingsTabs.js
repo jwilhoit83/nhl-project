@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function StandingsTabsMat() {
+const StandingsTabs = () => {
   return (
     <div className="row m-0">
       <ul className="tabs grey darken-3">
@@ -22,3 +22,5 @@ export default function StandingsTabsMat() {
     </div>
   );
 }
+
+export default StandingsTabs;

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import M from "materialize-css/dist/js/materialize.min.js";
 
-export default function Navbar() {
+const Navbar = () => {
   useEffect(() => {
     let sidenav = document.querySelector("#mobile-menu");
     M.Sidenav.init(sidenav, {edge: 'right'});
@@ -68,3 +68,5 @@ export default function Navbar() {
     </>
   );
 }
+
+export default Navbar;

@@ -1,4 +1,4 @@
-export default function PositionTabsMat({ onClick }) {
+const PositionTabs = ({ onClick }) => {
   return (
     <div className="row m-0">
       <ul className="tabs tabs-fixed-width grey darken-3">
@@ -62,3 +62,5 @@ export default function PositionTabsMat({ onClick }) {
     </div>
   );
 }
+
+export default PositionTabs;

@@ -3,7 +3,7 @@ import HockeyContext from "../context/hockey/hockeyContext";
 import { scheduleMap, setNewDate, formatDate } from "../utils/schedule";
 import LoadingAnimation from "./LoadingAnimation";
 
-export default function ScheduleMat() {
+const Schedule = () => {
   const [schedDate, setSchedDate] = useState(formatDate(setNewDate(Date.now())));
   const [displayDate, setDisplayDate] = useState(setNewDate(Date.now()));
 
@@ -88,3 +88,5 @@ export default function ScheduleMat() {
     </div>
   );
 }
+
+export default Schedule;
