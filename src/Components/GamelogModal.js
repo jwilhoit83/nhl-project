@@ -23,7 +23,7 @@ const GamelogModal = () => {
         return {
           id: game.game.id,
           position: game.player.position,
-          date: game.game.startTime.split("T")[0].slice(5),
+          date: game.game.startTime.split("T")[0].slice(5).replace('-', '/'),
           opp:
             game.team.abbreviation === game.game.awayTeamAbbreviation
               ? game.game.homeTeamAbbreviation
@@ -40,7 +40,7 @@ const GamelogModal = () => {
         return {
           id: game.game.id,
           position: game.player.position,
-          date: game.game.startTime.split("T")[0].slice(5),
+          date: game.game.startTime.split("T")[0].slice(5).replace('-', '/'),
           opp:
             game.team.abbreviation === game.game.awayTeamAbbreviation
               ? game.game.homeTeamAbbreviation
@@ -110,30 +110,30 @@ const GamelogModal = () => {
               <div className="gamelog-table z-depth-3">
                 <table className="grey darken-3">
                   <thead>
-                    <tr>
+                    <tr className='py-2'>
                       {gameLogs[0].position !== "G" ? (
                         <>
-                          <th>DATE</th>
-                          <th>OPP</th>
-                          <th>P</th>
-                          <th>G</th>
-                          <th>A</th>
-                          <th>PPG</th>
-                          <th>S</th>
-                          <th>HIT</th>
-                          <th>BLK</th>
+                          <th className='py-2'>DATE</th>
+                          <th className='py-2'>OPP</th>
+                          <th className='py-2'>P</th>
+                          <th className='py-2'>G</th>
+                          <th className='py-2'>A</th>
+                          <th className='py-2'>PPG</th>
+                          <th className='py-2'>S</th>
+                          <th className='py-2'>H</th>
+                          <th className='py-2'>BLK</th>
                         </>
                       ) : (
                         <>
-                          <th>DATE</th>
-                          <th>OPP</th>
-                          <th>GS</th>
-                          <th>W</th>
-                          <th>L</th>
-                          <th>SV</th>
-                          <th>SV%</th>
-                          <th>GA</th>
-                          <th>SO</th>
+                          <th className='py-2'>DATE</th>
+                          <th className='py-2'>OPP</th>
+                          <th className='py-2'>GS</th>
+                          <th className='py-2'>W</th>
+                          <th className='py-2'>L</th>
+                          <th className='py-2'>SV</th>
+                          <th className='py-2'>SV%</th>
+                          <th className='py-2'>GA</th>
+                          <th className='py-2'>SO</th>
                         </>
                       )}
                     </tr>
@@ -142,28 +142,28 @@ const GamelogModal = () => {
                     {gameLogs[0].position !== "G"
                       ? gameLogs.slice(0, 10).map((game) => (
                           <tr key={game.id}>
-                            <td>{game.date}</td>
-                            <td>{game.opp}</td>
-                            <td>{game.points}</td>
-                            <td>{game.goals}</td>
-                            <td>{game.assists}</td>
-                            <td>{game.ppg}</td>
-                            <td>{game.shots}</td>
-                            <td>{game.hits}</td>
-                            <td>{game.blocks}</td>
+                            <td className='py-2'>{game.date}</td>
+                            <td className='py-2'>{game.opp}</td>
+                            <td className='py-2'>{game.points}</td>
+                            <td className='py-2'>{game.goals}</td>
+                            <td className='py-2'>{game.assists}</td>
+                            <td className='py-2'>{game.ppg}</td>
+                            <td className='py-2'>{game.shots}</td>
+                            <td className='py-2'>{game.hits}</td>
+                            <td className='py-2'>{game.blocks}</td>
                           </tr>
                         ))
                       : gameLogs.slice(0, 10).map((game) => (
                           <tr key={game.id}>
-                            <td>{game.date}</td>
-                            <td>{game.opp}</td>
-                            <td>{game.gameStarted}</td>
-                            <td>{game.win}</td>
-                            <td>{game.loss}</td>
-                            <td>{game.saves}</td>
-                            <td>{game.savePerc}</td>
-                            <td>{game.goalsAgainst}</td>
-                            <td>{game.shutout}</td>
+                            <td className='py-2'>{game.date}</td>
+                            <td className='py-2'>{game.opp}</td>
+                            <td className='py-2'>{game.gameStarted}</td>
+                            <td className='py-2'>{game.win}</td>
+                            <td className='py-2'>{game.loss}</td>
+                            <td className='py-2'>{game.saves}</td>
+                            <td className='py-2'>{game.savePerc}</td>
+                            <td className='py-2'>{game.goalsAgainst}</td>
+                            <td className='py-2'>{game.shutout}</td>
                           </tr>
                         ))}
                   </tbody>

@@ -1,4 +1,20 @@
-const PositionTabs = ({ onClick }) => {
+import {useContext} from 'react';
+import HockeyContext from '../context/hockey/hockeyContext';
+
+const PositionTabs = () => {
+  const hockeyContext = useContext(HockeyContext);
+  const {setPlayers} = hockeyContext;
+
+  function positionFilter(e) {
+    if (e.target.innerText === "ALL") {
+      setPlayers();
+    } else if (e.target.innerText === "SK") {
+      setPlayers("c,lw,rw,d");
+    } else {
+      setPlayers(e.target.innerText);
+    }
+  }
+
   return (
     <div className="row m-0">
       <ul className="tabs tabs-fixed-width grey darken-3">
@@ -6,7 +22,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="All Players"
-            onClick={onClick}>
+            onClick={positionFilter}>
             All
           </button>
         </li>
@@ -14,7 +30,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="Skaters"
-            onClick={onClick}>
+            onClick={positionFilter}>
             SK
           </button>
         </li>
@@ -22,7 +38,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="Goalies"
-            onClick={onClick}>
+            onClick={positionFilter}>
             G
           </button>
         </li>
@@ -30,7 +46,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="Centers"
-            onClick={onClick}>
+            onClick={positionFilter}>
             C
           </button>
         </li>
@@ -38,7 +54,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="Left Wings"
-            onClick={onClick}>
+            onClick={positionFilter}>
             LW
           </button>
         </li>
@@ -46,7 +62,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="Right Wings"
-            onClick={onClick}>
+            onClick={positionFilter}>
             RW
           </button>
         </li>
@@ -54,7 +70,7 @@ const PositionTabs = ({ onClick }) => {
           <button
             className="btn-small btn-flat grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light"
             title="Defensemen"
-            onClick={onClick}>
+            onClick={positionFilter}>
             D
           </button>
         </li>

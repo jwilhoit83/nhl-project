@@ -70,6 +70,8 @@ export const playerMap = (players) => {
     return {
       id: player.player.id,
       name: fullName,
+      firstName: player.player.firstName,
+      lastName: player.player.lastName,
       injury: injury,
       injuryDescription: injury ? player.player.currentInjury.description.toUpperCase() : "",
       team: player.team.abbreviation,

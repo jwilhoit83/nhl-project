@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import HockeyContext from "../context/hockey/hockeyContext";
 import PositionTabs from "./PositionTabs";
 import { sortingLegend, playerMap } from "../utils/stats";
-import TablePagination from "@material-ui/core/TablePagination";
+import M from "materialize-css/dist/js/materialize.min.js";
 
 const StatsTable = () => {
   const hockeyContext = useContext(HockeyContext);
@@ -10,9 +10,13 @@ const StatsTable = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const count = players.length;
+  const lastPage = Math.ceil(count / rowsPerPage);
 
   useEffect(() => {
     setPlayers();
+    const select = document.querySelector("select");
+    M.FormSelect.init(select);
     // eslint-disable-next-line
   }, []);
 
@@ -20,15 +24,17 @@ const StatsTable = () => {
     sortPlayers(players.slice().sort(sortingLegend[e.target.innerText.toLowerCase()]));
   }
 
-  function positionFilter(e) {
-    if (e.target.innerText === "ALL") {
-      setPlayers();
-    } else if (e.target.innerText === "SK") {
-      setPlayers("c,lw,rw,d");
-    } else {
-      setPlayers(e.target.innerText);
-    }
-  }
+  // function positionFilter(e) {
+  //   if (e.target.innerText === "ALL") {
+  //     setPlayers();
+  //   } else if (e.target.innerText === "SK") {
+  //     setPlayers("c,lw,rw,d");
+  //   } else {
+  //     setPlayers(e.target.innerText);
+  //   }
+  // }
+
+  // Pagination helper functions
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -39,13 +45,29 @@ const StatsTable = () => {
     setPage(0);
   };
 
+  const handleFirstPageButtonClick = (event) => {
+    handleChangePage(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    handleChangePage(event, page > 0 ? page - 1 : 0);
+  };
+
+  const handleNextButtonClick = (event) => {
+    handleChangePage(event, page < lastPage - 1 ? page + 1 : page);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    handleChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
   const openInjuryModal = (e) => {
     setCurrentInjury(e.target.id);
   };
 
   return (
     <div className="container z-depth-3">
-      <PositionTabs onClick={positionFilter} />
+      <PositionTabs />
       <div className="stats-table">
         <table className="grey darken-3">
           <thead>
@@ -59,7 +81,10 @@ const StatsTable = () => {
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Position">
                 Pos
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Games Played">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Games Played">
                 GP
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Points">
@@ -71,22 +96,40 @@ const StatsTable = () => {
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Assists">
                 A
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Primary Assists">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Primary Assists">
                 PA
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Powerplay Goals">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Powerplay Goals">
                 PPG
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Powerplay Points">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Powerplay Points">
                 PPP
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Shorthanded Goals">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Shorthanded Goals">
                 SHG
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Shorthanded Points">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Shorthanded Points">
                 SHP
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Overtime Goals">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Overtime Goals">
                 OTG
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Shots">
@@ -95,31 +138,52 @@ const StatsTable = () => {
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Hits">
                 H
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Time on Ice/Game">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Time on Ice/Game">
                 TOI
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Penalty Minutes">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Penalty Minutes">
                 PIM
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Fights">
                 FIGHTS
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Blocked Shots">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Blocked Shots">
                 BLK
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Saves">
                 SV
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Goals Against">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Goals Against">
                 GA
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Goals Against Average">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Goals Against Average">
                 GAA
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Save Percentage">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Save Percentage">
                 SV%
               </td>
-              <td onClick={statsSorting} className="colHeadings secondary-dark" title="Games Started">
+              <td
+                onClick={statsSorting}
+                className="colHeadings secondary-dark"
+                title="Games Started">
                 GS
               </td>
               <td onClick={statsSorting} className="colHeadings secondary-dark" title="Wins">
@@ -134,17 +198,20 @@ const StatsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {(rowsPerPage > 0 ? playerMap(players).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : playerMap(players)).map((player) => {
+            {(rowsPerPage > 0
+              ? playerMap(players).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : playerMap(players)
+            ).map((player) => {
               return (
                 <tr key={player.id * Math.random()}>
                   <td id={player.id} className="rowStyles stickyCol primary-bg">
                     <span
                       data-target="gamelog-modal"
-                      className="modal-trigger"
-                      onClick={() => setCurrentPlayer(player.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {player.name}
+                      className="modal-trigger pointer"
+                      onClick={() => setCurrentPlayer(player.id)}>
+                        <span className="hide-on-small-only">{player.firstName + ' '}</span>
+                        <span className="hide-on-med-and-up">{player.firstName.slice(0, 1) + '. '}</span>
+                        <span>{player.lastName}</span>
                     </span>
                     {player.injury ? (
                       <>
@@ -153,8 +220,7 @@ const StatsTable = () => {
                           className="modal-trigger chipStyles"
                           title={player.injuryDescription}
                           onClick={openInjuryModal}
-                          id={player.id}
-                        >
+                          id={player.id}>
                           {player.injury}
                         </a>
                       </>
@@ -194,87 +260,47 @@ const StatsTable = () => {
           </tbody>
         </table>
       </div>
-      <table className='sticky-bottom'>
-        <tbody>
-          <tr>
-            <TablePagination
-              className="left browser-default grey darken-3 blue-grey-text text-lighten-2 full-width flex-row"
-              labelRowsPerPage="Rows: "
-              rowsPerPageOptions={[10, 20, 50, 75]}
-              colSpan={10}
-              count={players.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: { "aria-label": "rows per page" },
-                native: true,
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-              ActionsComponent={PaginationButtons}
-            />
-          </tr>
-        </tbody>
-      </table>
+      <div className="pagination-wrapper mx-10">
+        <div className="input-field col">
+          <select onChange={handleChangeRowsPerPage} defaultValue="rows">
+            <option value="rows" disabled>
+              Number of Rows
+            </option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+          </select>
+        </div>
+        <div>
+          <a
+            href="#!"
+            className="blue-grey-text text-lighten-2 waves-effect waves-light"
+            onClick={handleFirstPageButtonClick}>
+            <i className="small material-icons">first_page</i>
+          </a>
+          <a
+            href="#!"
+            className="blue-grey-text text-lighten-2 waves-effect waves-light"
+            onClick={handleBackButtonClick}>
+            <i className="small material-icons">keyboard_arrow_left</i>
+          </a>
+          <a
+            href="#!"
+            className="blue-grey-text text-lighten-2 waves-effect waves-light"
+            onClick={handleNextButtonClick}>
+            <i className="small material-icons">keyboard_arrow_right</i>
+          </a>
+          <a
+            href="#!"
+            className="blue-grey-text text-lighten-2 waves-effect waves-light"
+            onClick={handleLastPageButtonClick}>
+            <i className="small material-icons">last_page</i>
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
-
-function PaginationButtons({ count, page, rowsPerPage, onChangePage }) {
-  const handleFirstPageButtonClick = (event) => {
-    onChangePage(event, 0);
-  };
-
-  const handleBackButtonClick = (event) => {
-    onChangePage(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event) => {
-    onChangePage(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event) => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div style={{display: 'flex'}} className="mx-10">
-      <a
-        href="#!"
-        className={"btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" + (page === 0 ? "disabled" : "")}
-        onClick={handleFirstPageButtonClick}
-      >
-        <i className="small material-icons">first_page</i>
-      </a>
-        <a
-          href="#!"
-          className={"btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" + (page === 0 ? "disabled" : "")}
-          onClick={handleBackButtonClick}
-        >
-          <i className="small material-icons">keyboard_arrow_left</i>
-        </a>
-        <a
-          href="#!"
-          className={
-            "btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" +
-            (page >= Math.ceil(count / rowsPerPage) - 1 ? "disabled" : "")
-          }
-          onClick={handleNextButtonClick}
-        >
-          <i className="small material-icons">keyboard_arrow_right</i>
-        </a>
-        <a
-          href="#!"
-          className={
-            "btn-small grey darken-3 blue-grey-text text-lighten-2 waves-effect waves-light" +
-            (page >= Math.ceil(count / rowsPerPage) - 1 ? "disabled" : "")
-          }
-          onClick={handleLastPageButtonClick}
-        >
-          <i className="small material-icons">last_page</i>
-        </a>
-    </div>
-  );
-}
 
 export default StatsTable;

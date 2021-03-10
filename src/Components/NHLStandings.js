@@ -47,7 +47,7 @@ const NHLStandings = ({standings}) => {
       <tbody>
         {standings.map((team) => (
           <tr key={team.team.id}>
-            <td className="stickyCol secondary rowstyles secondary px-5">
+            <td className="stickyCol secondary rowstyles secondary py-5">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
                   style={{ height: 40, width: 40 }}
